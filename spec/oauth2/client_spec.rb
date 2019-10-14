@@ -35,7 +35,7 @@ describe OAuth2::Client do
     end
 
     it 'should leave Faraday::Connection#ssl unset' do
-      subject.connection.ssl.should == {}
+      expect(subject.connection.ssl).to be_empty
     end
 
     it "should be able to pass a block to configure the connection" do
@@ -53,14 +53,14 @@ describe OAuth2::Client do
     end
 
     it "defaults raise_errors to true" do
-      subject.options[:raise_errors].should be_true
+      expect(subject.options[:raise_errors]).to be_truthy
     end
 
     it "allows true/false for raise_errors option" do
-      client = OAuth2::Client.new('abc', 'def', :site => 'https://api.example.com', :raise_errors => false)
-      client.options[:raise_errors].should be_false
-      client = OAuth2::Client.new('abc', 'def', :site => 'https://api.example.com', :raise_errors => true)
-      client.options[:raise_errors].should be_true
+      client = OAuth2::Client.new('abc', 'def', site: 'https://api.example.com', raise_errors: false)
+      expect(client.options[:raise_errors]).to be_falsey
+      client = OAuth2::Client.new('abc', 'def', site: 'https://api.example.com', raise_errors: true)
+      expect(client.options[:raise_errors]).to be_truthy
     end
 
     it "allows get/post for access_token_method option" do
@@ -181,7 +181,7 @@ describe OAuth2::Client do
     end
 
     it 'should pass the SSL options along to Faraday::Connection#ssl' do
-      subject.connection.ssl.should == {:ca_file => 'foo.pem'}
+      expect(subject.connection.ssl.ca_file).to eq('foo.pem')
     end
   end
 end

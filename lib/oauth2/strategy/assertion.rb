@@ -50,19 +50,21 @@ module OAuth2
 
       def build_request(params)
         assertion = build_assertion(params)
-        {:grant_type     => "assertion", 
-         :assertion_type => "urn:ietf:params:oauth:grant-type:jwt-bearer",
-         :assertion      => assertion,
-         :scope          => params[:scope]
+        {
+          :grant_type     => "assertion",
+          :assertion_type => "urn:ietf:params:oauth:grant-type:jwt-bearer",
+          :assertion      => assertion,
+          :scope          => params[:scope]
         }.merge(client_params)
       end
 
       def build_assertion(params)
-        claims = {:iss => params[:iss],
-                  :aud => params[:aud],
-                  :prn => params[:prn],
-                  :exp => params[:exp]
-                 }
+        claims = {
+          iss: params[:iss],
+          aud: params[:aud],
+          prn: params[:prn],
+          exp: params[:exp]
+         }
         if params[:hmac_secret]
           jwt_assertion = JWT.encode(claims, params[:hmac_secret], "HS256")
         elsif params[:private_key]
@@ -72,4 +74,3 @@ module OAuth2
     end
   end
 end
-
